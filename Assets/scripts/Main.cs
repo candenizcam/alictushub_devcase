@@ -89,6 +89,12 @@ public class Main : MonoBehaviour
             activeBruteScript.SpawnAround(mainPos,30f);
         }
         
+        foreach (var bruteProjectileScript in projectileList)
+        {
+            bruteProjectileScript.Terminate();
+        }
+        
+        boomerangScript.Terminate();
         
         characterHp = characterDamageLimit;
         mainCharacterScript.SetHealth(1f);
@@ -161,11 +167,20 @@ public class Main : MonoBehaviour
                 continue;
             }
 
+            var activePosition = activeBruteScript.transform.position;
+            var distance = (activePosition - mainCharacterPosition).magnitude;
+            
             if (activeBruteScript.dying) // if it is dying, we move on
             {
+                if (distance < closeContactDistance)
+                {
+                    characterHp = 0;
+                    mainCharacterScript.SetHealth(0f);
+                    KillCharacter();
+                }
                 continue;
             }
-            var activePosition = activeBruteScript.transform.position;
+            
             var boomerangDistance =
                 (boomerangScript.transform.position - activePosition).magnitude;
 
@@ -177,7 +192,7 @@ public class Main : MonoBehaviour
             }
             
             
-            var distance = (activePosition - mainCharacterPosition).magnitude;
+            
         
             if (distance > attackDistance*1.2f) // if it is not in shooting distance, it runs
             {
@@ -192,11 +207,17 @@ public class Main : MonoBehaviour
             }
             else // if very close, it kills
             {
-                characterHp = 0;
-                mainCharacterScript.SetHealth(0f);
+                KillCharacter();
+                
                 // die
             }
         }
+    }
+
+    private void KillCharacter()
+    {
+        characterHp = 0;
+        mainCharacterScript.SetHealth(0f);
     }
 
     private void FireBoomerang(BruteScript activeBruteScript)
@@ -245,16 +266,14 @@ public class Main : MonoBehaviour
 
             if (distance > 30f)
             { // remove
-                bruteProjectileScript.inactive = true;
-                bruteProjectileScript.transform.Translate(0f,-10f,0f);
+                bruteProjectileScript.Terminate();
             }
             else if (distance<closeContactDistance)
             {
                 // damage
                 characterHp -= 1;
                 mainCharacterScript.SetHealth((float)characterHp/characterDamageLimit);
-                bruteProjectileScript.inactive = true;
-                bruteProjectileScript.transform.Translate(0f,-10f,0f);
+                bruteProjectileScript.Terminate();
                 
             }
         }

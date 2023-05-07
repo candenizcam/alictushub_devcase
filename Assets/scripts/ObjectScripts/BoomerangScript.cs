@@ -33,7 +33,7 @@ namespace DefaultNamespace
             var rotY = objectTransform.rotation.eulerAngles.y;
             objectTransform.rotation = Quaternion.Euler(90f,rotY + 720f*Time.deltaTime,0f);
 
-            if (difference.magnitude < .2f)
+            if (difference.magnitude < .5f)
             {
                 if (_returning)
                 {
@@ -47,7 +47,7 @@ namespace DefaultNamespace
             
         }
 
-        private void Terminate()
+        public void Terminate()
         {
             active = false;
             transform.Translate(0f,-10f,0f);

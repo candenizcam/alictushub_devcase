@@ -26,6 +26,7 @@ public class MainCharacterScript : MonoBehaviour
     public void SetHealth(float f)
     {
         healthBar.fillAmount = f;
+        healthBar.color = f<.25f ? Color.red : Color.green;
     }
 
     public void StartDeath()

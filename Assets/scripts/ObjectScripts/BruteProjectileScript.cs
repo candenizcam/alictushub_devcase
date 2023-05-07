@@ -16,6 +16,12 @@ public class BruteProjectileScript : MonoBehaviour
         _fireDirection = fireDirection;
         transform.position = startVector;
     }
+
+    public void Terminate()
+    {
+        inactive = true;
+        transform.Translate(0f,-10f,0f);
+    }
     
     // Update is called once per frame
     void Update()
